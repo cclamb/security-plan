@@ -14,6 +14,7 @@
 \usepackage{listings}
 \usepackage{courier}
 \usepackage{color}
+\usepackage{url}
 \usepackage[backend=bibtex,style=ieee]{biblatex}
 
 \lstset{
@@ -51,11 +52,15 @@
 \mode<presentation>
 
 \renewcommand*{\bibfont}{\tiny}
+\renewcommand{\footnotesize}{\tiny}
 
 \newcommand{\dred}{darkred!90!black}
 \newcommand{\written}{\ECFJD\textcolor{cyan!50!white}}
 \newcommand{\hlight}{\textcolor{\dred}}
 \newcommand{\Ex}{\textcolor{\dred}{Ex. }}
+
+% Remove drop shadow from title box on title page.
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
 
 % remove navigation symbols in full screen mode
 \setbeamertemplate{navigation symbols}{}  

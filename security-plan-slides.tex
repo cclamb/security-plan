@@ -7,8 +7,8 @@
 \title[FERPA, UNM, and AWS]
 {FERPA, UNM, and AWS}
 
-\author[Lamb, Heileman] % (optional, use only with lots of authors)
-{\bf Christopher C. Lamb \ \ \ \ Gregory L. Heileman}
+\author[Heileman] % (optional, use only with lots of authors)
+{\bf Gregory L. Heileman}
 
 \institute[]
 {Informatics Laboratory \\
@@ -31,68 +31,190 @@ University of New Mexico}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section*{Outline}
-
-\begin{frame}  \frametitle{Outline}  
-	\tableofcontents
-\end{frame}
+%\section*{Outline}
+%
+%\begin{frame}  \frametitle{Outline}  
+%	\tableofcontents
+%\end{frame}
 
 \section{Introduction}
 
-\begin{frame}{Introduction}
+\begin{frame}{Why are we here?}
+\textbf{We are moving aggregated student data to Amazon for cohort analysis.}
+\\~\\
+{\small This is happening now --- but we need help to do it right.}
+\\~\\
+\pause
+We are a lab with research experience in data analytics, cyber-security\footnote{Recent graduations has this concentrated in a couple of us.}, and cloud computing experience. We are not a disciplined devops shop:
+\pause
+{\small
 \begin{itemize}
-\vspace*{-0.2in}
- \item The Informatics Laboratory, located in the Department of Electrical \& Computer Engineering at the University of New Mexico, is a multi-disciplinary research group focused on ``informatics.''~\\~\\
- \pause
- \item Informatics is concerned with the science around information processing and analytics, and the engineering of information systems.~\\~\\
- \pause
- \item Our research has focused primarily on the areas of information security, assured information sharing in complex distributed systems,  information architectures, and data science (big data, information analytics, semantic representations, data visualization).~\\~\\
- \pause
- \item We have stood up a private cloud computing infrastructure in the lab for experimentation purposes.
- \end{itemize}
+\item We do not have permanent staff\footnote{Well, some of our PhD students seem pretty close to permanent.}
+\pause
+\item We do not have 24-hour response.
+\pause
+\item We do not have operational cyber-security experience.
+\end{itemize}
+}
 \end{frame}
 
-\begin{frame}{Introduction}
-%\begin{itemize}
-% \item As a part of this research effort, we will investigate how EM radiation may lead to unintended state changes in the memory and combinatorial logic circuits associated with a computing system, and how these may lead to software errors, and changes in computing system behavior.~\\~\\
-% \pause
-% \item If these faults can be injected in any sort of predictable fashion, there are numerous system security exploits that might be enabled.~\\~\\
-% \pause
-% \item Thus, we will further explore the various ways in which these state changes may be leveraged in order to compromise  computing systems.  \pause How do these effects translate up the stack of the hardware/software machine hierarchy?
-% \end{itemize}
+\begin{frame}{Security Profile \& Controls}
+\textbf{FIPS 199, 200 and NIST SP800-53}
+{\small
+\begin{itemize}
+\item FIPS helps you decide how important your data is
+\item NIST helps you select the controls to protect it
+\end{itemize}
+}
+
+\textbf{Other Universities}
+{\small
+\begin{itemize}
+\item UNC Asheville, Carnegie Mellon University rate student data at high
+\item Colorado University, Loyola University rate student data at moderate
+\end{itemize}
+}
+~\\~\\
+High implies loss-of-life; we selected moderate as our guideline for security control selection from NIST SP800-53~\footnote{Moderate doesn't mean insignificant. The number of required controls at the moderate level is still daunting, much larger than low, and slightly less than high.}.
+
+
 \end{frame}
 
-\section{Background}
+\section{Responsibilities}
 
-\begin{frame}{Background}
-%Early instances of EMI-based fault injection:
-% \begin{itemize}
-%    \item Aerospace hardware affected by solar wind and cosmic rays.
-%    \pause
-%    \item Residues of radioactive material that release $\alpha$ particles~\cite{Sorcerer_Fault_Attacks}.
-%    \end{itemize}~\\
-% \pause
-%These can ``flip'' bits in the circuits of an IC, thereby affecting the combinatorial logic circuits associated with the computing system.
+\begin{frame}{Responsibilities - Infrastructure}
+ 	\includegraphics[width=\textwidth]{442-mod.pdf} \\
+ 	{\tiny Extracted from content provided by Amazon Web Services~\footfullcite{Aws:15}.}
 \end{frame}
 
-\begin{frame}{Background}
- 	\includegraphics[width=\textwidth]{442-mod.pdf} \\~\\~\\
- 	{\tiny Extracted from content provided by Amazon Web Services~\cite{Aws:15}.}
+\begin{frame}{Responsibilities - Containers}
+ 	\includegraphics[width=\textwidth]{445-mod.pdf}
 \end{frame}
 
-\begin{frame}{Background}
- 	\includegraphics[width=\textwidth]{445-mod.pdf} \\~\\~\\
- 	{\tiny Extracted from content provided by Amazon Web Services~\cite{Aws:15}.}
+\begin{frame}{Responsibilities - Abstract Services}
+ 	\includegraphics[width=\textwidth]{448-mod.pdf}
 \end{frame}
 
-\begin{frame}{Background}
- 	\includegraphics[width=\textwidth]{448-mod.pdf} \\
- 	{\tiny Extracted from content provided by Amazon Web Services~\cite{Aws:15}.}
+\begin{frame}{Our Responsibilities}
+
+{\small
+\textbf{OS, Network, FW Configuration}
+\begin{itemize}
+\item Elastic Compute Cloud (EC2) VMs run SELinux/Redhat, IPTables
+\item We don't manage UNM VMs or Firewalls
+\item We manage host firewalls only, and we don't maintain a VPC (for now)
+\end{itemize}
+}
+
+\pause
+
+\textbf{Platform \& Application Management}
+{\small
+\begin{itemize}
+\item Ruby/Rails --- Runs on EC2; manually patched when required via the \textit{bundler} and \textit{gem} utilities
+\item Redis --- Currently migrating to Amazon RDS and Elasticache
+\item Prolog --- Patched via operating system utilities
+\end{itemize}
+}
+
+\pause
+
+\textbf{Student Data}
+{\small
+\begin{itemize}
+\item Data is encrypted at rest~\footfullcite{BeHo:14} and in motion (HTTPS or equivalent)
+\end{itemize}
+}
+
 \end{frame}
 
-\begin{frame}{Bibliography}
- 	\def\newblock{}	
-	\printbibliography
+\begin{frame}{Identity Management, Accounts, and Keys}
+
+\textbf{UNM and Local Identity Management}
+{\small
+\begin{itemize}
+\item Local accounts on EC2 and amazon are managed using UNM password policies (strong passwords with six month rotation)
+\item Application access is authorized via local whitelists and CAS authentication to UNM
+\item We only allow administrative access via sudo
+\item We use Amazon IAM as much as possible
+\end{itemize}
+}
+
+\textbf{Amazon Identity Management}
+{\small
+\begin{itemize}
+\item Phasing out SSH access to running systems
+\item Migrating to multi-factor authentication (e.g. Google Authenticator)~\footfullcite{MFA:15}
+\item Amazon key management for key storage
+\end{itemize}
+}
 \end{frame}
+
+\begin{frame}{Security Monitoring}
+
+\textbf{CloudWatch}
+{\small
+\begin{itemize}
+\item Syslog, performance, communication, etc.
+\item Early indicator that VMs have been compromised
+\begin{itemize}
+\item Higher usage
+\item New VM creation
+\item Very large instance creation (great for mining bitcoin, for example)
+\end{itemize}
+\end{itemize}
+}
+
+\textbf{CloudTrail}
+{\small
+\begin{itemize}
+\item Compliance monitoring, user activity tracking, API access
+\item Good for initial intrusion detection
+\begin{itemize}
+\item New API access
+\item Excessive API access
+\end{itemize}
+\end{itemize}
+}
+~\\
+\centering
+\textbf{We don't monitor these as well as we should.}
+\end{frame}
+
+\begin{frame}{Wrapping Up}
+
+\textbf{We have some things in process...}
+{\small
+\begin{itemize}
+\item NIST SP800-53 mappings and documentation
+\item Migration to VPC
+\item More automation
+\end{itemize}
+}
+
+\textbf{...we are doing some things well...}
+{\small
+\begin{itemize}
+\item Controlled VM images
+\item Authentication integration
+\item At rest/in motion encryption
+\item Patching
+\end{itemize}
+}
+
+\textbf{...but we need some help.}
+{\small
+\begin{itemize}
+\item Monitoring, management, continuity
+\item Security auditing in all phases
+\end{itemize}
+}
+
+\end{frame}
+
+%\begin{frame}{Bibliography}
+% 	\def\newblock{}	
+%	\printbibliography
+%\end{frame}
 
 \end{document}
