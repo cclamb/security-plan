@@ -80,6 +80,15 @@ High implies loss-of-life; we selected moderate as our guideline for security co
 
 \end{frame}
 
+\section{Technical Components}
+
+\begin{frame}{Technical Components}
+	\begin{center}
+		\includegraphics[width=\textwidth]{technical_architecture.png}
+	\end{center}
+\end{frame}
+
+
 \section{Responsibilities}
 
 \begin{frame}{Responsibilities - Infrastructure}
@@ -95,12 +104,31 @@ High implies loss-of-life; we selected moderate as our guideline for security co
  	\includegraphics[width=\textwidth]{448-mod.pdf}
 \end{frame}
 
-\begin{frame}{Our Responsibilities}
+\begin{frame}{Our Responsibilities - Heroku}
 
+\textbf{Heroku is a PaaS Offering}
 {\small
-\textbf{OS, Network, FW Configuration}
 \begin{itemize}
-\item Elastic Compute Cloud (EC2) VMs run SELinux/Redhat, IPTables
+\item We \textbf{don't} maintain the Rails or PostreSQL installation
+\item We \textbf{do} maintain the running application
+\begin{itemize}
+\item This application does not serve PII
+\item It only handles non-confidential degree plan data
+\end{itemize}
+\end{itemize}
+}
+~\\
+\centering
+\textbf{We do communicate via HTTPS and do sanitize data from this system}
+
+\end{frame}
+
+\begin{frame}{Our Responsibilities - AWS}
+
+\textbf{OS, Network, FW Configuration}
+{\small
+\begin{itemize}
+\item Elastic Compute Cloud (EC2) VMs run SELinux/Redhat, UFW
 \item We don't manage UNM VMs or Firewalls
 \item We manage host firewalls only, and we don't maintain a VPC (for now)
 \end{itemize}
