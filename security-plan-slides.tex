@@ -4,15 +4,15 @@
 
 \addbibresource{bib/aws.bib}
 
-\title[FERPA, UNM, and AWS]
-{FERPA, UNM, and AWS}
+\title[Cohort Analytics]
+{Cohort Analytics and Cloud Usage: Security Review}
 
-\author[Heileman] % (optional, use only with lots of authors)
-{\bf Gregory L. Heileman}
+\author[Heileman \& Babbitt] % (optional, use only with lots of authors)
+{\bf Gregory L. Heileman \ \ \ \ \ Terry Babbitt}
 
-\institute[]
-{Informatics Laboratory \\
-Department of Electrical \& Computer Engineering \\
+\institute[UNM]
+{Application Development Team \\
+Academic Affairs \\
 University of New Mexico}
 
 \date[June 26, 2015]
@@ -39,58 +39,91 @@ University of New Mexico}
 
 \section{Introduction}
 
-\begin{frame}{Why are we here?}
-\textbf{We are moving aggregated student data to Amazon for cohort analysis.}
-\\~\\
-{\small This is happening now --- but we need help to do it right.}
-\\~\\
+\begin{frame}{Cohort Analytics -- Overview}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace*{-0.2in}
+\textbf{We have developed a cohort analytics application that will dramatically improve our student success capabilities.}~\\~\\
 \pause
-We are a lab with research experience in data analytics, cyber-security\footnote{Recent graduations has this concentrated in a couple of us.}, and cloud computing experience. We are not a disciplined devops shop:
-\pause
-{\small
+This application will enable:
 \begin{itemize}
-\item We do not have permanent staff\footnote{Well, some of our PhD students seem pretty close to permanent.}
+\item Advisors, chairs, deans and administrators to track the progress of relevant student cohorts relative to academic progress. 
 \pause
-\item We do not have 24-hour response.
+\item Earlier insights into various metrics the regents, president, provost have asked us to track.  E.g., accurately project the number of students who will graduate in four years (tuition free final semester).
 \pause
-\item We do not have operational cyber-security experience.
-\end{itemize}
-}
+\item The ability to set and track program- and college-level success targets.
+\pause
+\item More accurate graduation rate projections (years in advance, rather than months in advance of required reporting). 
+\end{itemize}~\\
+\pause
+{\bf Target Date for Release: August 7, 2015}
 \end{frame}
 
-\begin{frame}{Security Profile \& Controls}
-\textbf{FIPS 199, 200 and NIST SP800-53}
-{\small
-\begin{itemize}
-\item FIPS helps you decide how important your data is
-\item NIST helps you select the controls to protect it
-\end{itemize}
-}
-
-\textbf{Other Universities}
-{\small
-\begin{itemize}
-\item UNC Asheville, Carnegie Mellon University rate student data at high
-\item Colorado University, Loyola University rate student data at moderate
-\end{itemize}
-}
-~\\~\\
-High implies loss-of-life; we selected moderate as our guideline for security control selection from NIST SP800-53~\footnote{Moderate doesn't mean insignificant. The number of required controls at the moderate level is still daunting, much larger than low, and slightly less than high.}.
-
-
+\begin{frame}{Cohort Analytics Dashboard}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \vspace*{-0.25in}
+  \centerline{\includegraphics[width=3.75in]{Dashboard1.png}}
 \end{frame}
 
-\section{Technical Components}
-
-\begin{frame}{Technical Components}
-	\begin{center}
-		\includegraphics[width=\textwidth]{technical_architecture.png}
-	\end{center}
+\begin{frame}{Cohort Analytics Dashboard}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \vspace*{-0.25in}
+  \centerline{\includegraphics[width=4.75in]{Dashboard2.png}}
 \end{frame}
 
+\begin{frame}{Cohort Analytics Dashboard (fake names)}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \vspace*{-0.25in}
+  \centerline{\includegraphics[width=4.35in]{Dashboard3.png}}
+\end{frame}
 
-\section{Responsibilities}
+\begin{frame}{Cohort Analytics Dashboard (fake name)}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \vspace*{-0.25in}
+  \centerline{\includegraphics[width=4.2in]{Dashboard4.png}}
+\end{frame}
 
+\begin{frame}{Cohort Analytics -- Components}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The application involves the integration of a number of information systems:
+\begin{itemize}
+ \item Student Data Mart -- student progress data (FERPA applies).
+ \pause
+ \item Degree Requirements and Degree Plans databases.
+ \pause 
+ \item Reasoning Engine -- reasons over the aforementioned data stores.
+ \pause
+ \item CAS Authentication and Authorization (whitelist until BAR roles are made available).
+ \pause
+ \item Analytics and Interactive Dashboard Framework.
+\end{itemize}~\\
+\pause
+{\bf Note: the system involves moving student data to Amazon Web Services.}
+\end{frame}
+
+\begin{frame}{Security Profile \& Controls}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace*{-0.25in}
+As the system crosses boundaries between UNM IT systems and external cloud systems, we would like to collaborate to ensure student data is protected according to UNM Data Governance policies.~\\~\\
+\pause
+\textbf{FIPS-199, -200 and NIST SP800-53:}
+{\small
+\begin{itemize}
+\item FIPS helps you determine the importance of your data. 
+\item NIST helps you select the controls to protect it.
+\end{itemize}
+}
+\pause
+\textbf{Other Universities (FIPS-199):}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item UNC Asheville, Carnegie Mellon rate student data at high.
+\item University of Colorado (system), Loyola University rate student data at moderate.
+\end{itemize}
+\pause
+\vspace*{0.1in}
+High implies loss-of-life; using the NIST SP800-53 guideline for security control selection, our analysis is {\bf moderate}.\footnote{Moderate doesn't mean insignificant. The number of required controls at the moderate level is still daunting, much larger than low, and slightly less than high.}
+\end{frame}
+
+\section{Technical Components}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Cohort Analytics -- Technical Components}
+\vspace*{0.25in}
+  \centerline{\includegraphics[width=5.1in,height=2.2in]{architecture.png}}
+\end{frame}
+
+\section{Responsibilities}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Responsibilities - Infrastructure}
  	\includegraphics[width=\textwidth]{442-mod.pdf} \\
  	{\tiny Extracted from content provided by Amazon Web Services~\footfullcite{Aws:15}.}
@@ -104,146 +137,87 @@ High implies loss-of-life; we selected moderate as our guideline for security co
  	\includegraphics[width=\textwidth]{448-mod.pdf}
 \end{frame}
 
-\begin{frame}{Our Responsibilities - Heroku}
-
-\textbf{Heroku is a PaaS Offering}
-{\small
-\begin{itemize}
-\item We \textbf{don't} maintain the Rails or PostreSQL installation
-\item We \textbf{do} maintain the running application
-\begin{itemize}
-\item This application does not serve PII
-\item It only handles non-confidential degree plan data
-\end{itemize}
-\end{itemize}
-}
-\centering
-\textbf{We communicate via HTTPS and sanitize data from this system}
-
-\end{frame}
-
-\begin{frame}{Our Responsibilities - AWS}
-
-\textbf{OS, Network, FW Configuration}
+\begin{frame}{Our Responsibilities - AWS}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{OS, Network, FW Configuration:}
 {\small
 \begin{itemize}
 \item Elastic Compute Cloud (EC2) VMs run SELinux/Redhat, UFW
 \item We don't manage UNM VMs or Firewalls
-\item We manage host firewalls only, and we don't maintain a VPC (for now)
+\item We manage host firewalls and maintain the VPC
 \end{itemize}
 }
-
 \pause
-
-\textbf{Platform \& Application Management}
+\textbf{Platform \& Application Management:}
 {\small
 \begin{itemize}
 \item Ruby/Rails --- Runs on EC2; manually patched when required via the \textit{bundler} and \textit{gem} utilities
-\item Redis --- Currently migrating to Amazon RDS and Elasticache
+\item Redis --- Runs on Amazon RDS and Elasticache
 \item Prolog --- Patched via operating system utilities
 \end{itemize}
 }
-
 \pause
-
-\textbf{Student Data}
+\textbf{Student Data:}
 {\small
 \begin{itemize}
-\item Data is encrypted at rest~\footfullcite{BeHo:14} and in motion (HTTPS or equivalent)
+\item Encrypted~\footfullcite{BeHo:14} at rest on AWS side and in motion (HTTPS or equivalent)
 \end{itemize}
 }
-
 \end{frame}
 
-\begin{frame}{Identity Management, Accounts, and Keys}
-
+\begin{frame}{Identity Management, Accounts, and Keys}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textbf{UNM and Local Identity Management}
 {\small
 \begin{itemize}
 \item Local accounts on EC2 and amazon are managed using UNM password policies (strong passwords with six month rotation)
-\item Application access is authorized via local whitelists and CAS authentication to UNM
-\item We only allow administrative access via sudo
-\item We use Amazon IAM as much as possible
+\item Application access is authorized via local whitelists and CAS authentication to UNM.
+\item We only allow administrative access via {\tt sudo}.
+\item We use Amazon IAM as much as possible.
 \end{itemize}
 }
-
 \textbf{Amazon Identity Management}
 {\small
 \begin{itemize}
-\item Phasing out SSH access to running systems
-\item Migrating to multi-factor authentication (e.g. Google Authenticator)~\footfullcite{MFA:15}
-\item Amazon key management for key storage
+\item Initially SSH access to running systems.
+\item Migration to multi-factor authentication (e.g. Google Authenticator).~\footfullcite{MFA:15}
+\item Amazon key management for key storage.
 \end{itemize}
 }
 \end{frame}
 
-\begin{frame}{Security Monitoring}
-
+\begin{frame}{Security Monitoring}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace*{-0.2in}
 \textbf{CloudWatch}
 {\small
 \begin{itemize}
 \item Syslog, performance, communication, etc.
-\item Early indicator that VMs have been compromised
+\item Early indicator that VMs have been compromised:
 \begin{itemize}
 \item Higher usage
 \item New VM creation
-\item Very large instance creation (great for mining bitcoin, for example)
+\item Very large instance creation (great for mining bitcoin, for example).
 \end{itemize}
-\end{itemize}
-}
-
+\end{itemize}}
 \textbf{CloudTrail}
 {\small
 \begin{itemize}
-\item Compliance monitoring, user activity tracking, API access
-\item Good for initial intrusion detection
+\item Compliance monitoring, user activity tracking, API access.
+\item Good for initial intrusion detection:
 \begin{itemize}
 \item New API access
 \item Excessive API access
 \end{itemize}
-\end{itemize}
-}
-~\\
-
-\centering
-\textbf{We don't monitor these as well as we should.}
-
-\end{frame}
-
-\begin{frame}{Wrapping Up}
-
-\textbf{We have some things in process...}
-{\small
-\begin{itemize}
-\item NIST SP800-53 mappings and documentation
-\item Migration to VPC
-\item More automation
-\end{itemize}
-}
-
-\textbf{...we are doing some things well...}
-{\small
-\begin{itemize}
-\item Controlled VM images
-\item Authentication integration
-\item At rest/in motion encryption
-\item Patching
-\end{itemize}
-}
-
-\textbf{...but we need some help.}
-{\small
+\end{itemize}}
+\pause
+{\bf We would like to collaborate with UNM IT on:}
 \begin{itemize}
 \item Monitoring, management, continuity
-\item Security auditing in all phases
+\item Security auditing 
 \end{itemize}
-}
-
 \end{frame}
 
-%\begin{frame}{Bibliography}
-% 	\def\newblock{}	
-%	\printbibliography
-%\end{frame}
+\begin{frame}{Bibliography}
+ 	\def\newblock{}	
+	\printbibliography
+\end{frame}
 
 \end{document}
