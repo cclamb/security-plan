@@ -1,4 +1,6 @@
-\documentclass[t,handout]{beamer}   % overlays
+\documentclass[t]{beamer}   % overlays
+%%\documentclass[t,handout]{beamer}   % no overlays
+%%\setbeameroption{show notes}     % create slides with notes
 
 \input{./preamble.tex}
 
@@ -7,8 +9,8 @@
 \title[Cohort Analytics]
 {Cohort Analytics and Cloud Usage: Security Review}
 
-\author[Heileman \& Babbitt] % (optional, use only with lots of authors)
-{\bf Gregory L. Heileman \ \ \ \ \ Terry Babbitt}
+\author[Heileman, Babbitt \& Abdallah] % (optional, use only with lots of authors)
+{\bf Greg Heileman \ \ \ \ \ Terry Babbitt \ \ \ \ \ Chaouki Abdallah}
 
 \institute[UNM]
 {Application Development Team \\
@@ -78,6 +80,7 @@ This application will enable:
   \centerline{\includegraphics[width=4.2in]{Dashboard4.png}}
 \end{frame}
 
+
 \begin{frame}{Cohort Analytics -- Components}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The application involves the integration of a number of information systems:
 \begin{itemize}
@@ -95,33 +98,77 @@ The application involves the integration of a number of information systems:
 {\bf Note: the system involves moving student data to Amazon Web Services.}
 \end{frame}
 
-\begin{frame}{Security Profile \& Controls}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Security Profile \& Controls~\footfullcite{UNM_ITS:08}}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace*{-0.25in}
-As the system crosses boundaries between UNM IT systems and external cloud systems, we would like to collaborate to ensure student data is protected according to UNM Data Governance policies.~\\~\\
+\textbf{UNM Data Classification:}
+\begin{enumerate}
+\item Data owners: students
 \pause
-\textbf{FIPS-199, -200 and NIST SP800-53:}
-{\small
-\begin{itemize}
-\item FIPS helps you determine the importance of your data. 
-\item NIST helps you select the controls to protect it.
-\end{itemize}
-}
+\item Data steward: Enrollment Management (Terry Babbitt), Custodians: AA Application Development Team and end users
 \pause
-\textbf{Other Universities (FIPS-199):}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{itemize}
-\item UNC Asheville, Carnegie Mellon rate student data at high.
-\item University of Colorado (system), Loyola University rate student data at moderate.
-\end{itemize}
+\item Information system identification: see slide~10
+\pause
+\item Data categorization: student data -- academic performance and other student attributes (e.g., ethnicity, gender, HS attended, etc.)
+\pause
+\item Privacy requirements: FERPA 
+\pause
+\item Data Classification: see next slide
+\pause
+\item UNM Information Security Safeguards guidance: not available (see attached document and the following slides for our security control selection analysis)
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{UNM Data Classification Worksheet~\footfullcite{UNM_ITS:08}}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace*{-0.2in}
+\textbf{Data Owner:} students~\\
 \pause
 \vspace*{0.1in}
-High implies loss-of-life; using the NIST SP800-53 guideline for security control selection, our analysis is {\bf moderate}.\footnote{Moderate doesn't mean insignificant. The number of required controls at the moderate level is still daunting, much larger than low, and slightly less than high.}
+\textbf{Information System (application name):} Cohort Analytics~\\
+\pause
+\vspace*{0.1in}
+\textbf{Specific Pieces of Data:} student data -- academic performance and other student attributes (e.g., ethnicity, gender, HS attended, etc.)~\\
+\pause
+\vspace*{0.1in}
+\textbf{Data Classification:} FIPS SC for cohort analytics data = \{(Confidentiality, Moderate), (Integrity, Low), ( Availability, Low)\}~\\  
+\pause
+\textbf{Note:} Moderate confidentiality requirements will be supported through controls including encryption at rest and in transit, via encryption standards described below. ~\\
+\pause
+\vspace*{0.1in}
+\textbf{Rationale:} see attached document.~\\
+\pause
+\vspace*{0.1in}
+The combination of the above data classification, and the appropriate controls given this classification, seem to imply UNM's ``E Class.''
+\note[\item]{CONFIDENTIALITY?Preserving authorized restrictions on information access and disclosure, including means for protecting personal privacy and proprietary information...? [44 U.S.C., Sec. 3542]~\\A loss of confidentiality is the unauthorized disclosure of information. ~\\
+INTEGRITY?Guarding against improper information modification or destruction, and includes ensuring information non-repudiation and authenticity...? [44 U.S.C., Sec. 3542]~\\A loss of integrity is the unauthorized modification or destruction of information.~\\AV AILABILITY?Ensuring timely and reliable access to and use of information...? [44 U.S.C., SEC. 3542]~\\A loss of availability is the disruption of access to or use of information or an information system.}
 \end{frame}
 
 \section{Technical Components}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Cohort Analytics -- Technical Components}
 \vspace*{0.25in}
-  \centerline{\includegraphics[width=5.1in,height=2.2in]{architecture.png}}
+  \centerline{\includegraphics[width=4.9in,height=2.2in]{vpc_view_certs.png}}
 \end{frame}
+
+\section{Technical Components}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Cohort Analytics -- Technical Components}
+\vspace*{-0.15in}
+\textbf{Notes:}
+\begin{itemize}
+ \item Until the Banner Authorization Role (BAR) can be worked out, we will use UNM's CAS system for user authentication, and we will maintain a whitelist on the AWS side for user authorization. 
+ \pause Whitelist entires must have UNM FERPA training, and if this is satisfied will include:
+ \begin{itemize}
+  \item UNM President and Provost Office administrators.
+  \pause
+  \item Deans, Chairs and Program-level administrators
+  \pause
+  \item Academic Advisors
+  \pause
+  \item Others with a justified business need.
+ \end{itemize}~\\
+  \pause
+ \item For the required encrypted connections between these users and the Cohort Analytics system running on AWS, Academic Affairs will obtain a Premium SSL Certificate from Comodo.
+\end{itemize}
+\end{frame}
+
 
 \section{Responsibilities}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Responsibilities - Infrastructure}
@@ -129,11 +176,11 @@ High implies loss-of-life; using the NIST SP800-53 guideline for security contro
  	{\tiny Extracted from content provided by Amazon Web Services~\footfullcite{Aws:15}.}
 \end{frame}
 
-\begin{frame}{Responsibilities - Containers}
+\begin{frame}{Responsibilities - Containers}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  	\includegraphics[width=\textwidth]{445-mod.pdf}
 \end{frame}
 
-\begin{frame}{Responsibilities - Abstract Services}
+\begin{frame}{Responsibilities - Abstract Services}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  	\includegraphics[width=\textwidth]{448-mod.pdf}
 \end{frame}
 
@@ -174,6 +221,7 @@ High implies loss-of-life; using the NIST SP800-53 guideline for security contro
 \item We use Amazon IAM as much as possible.
 \end{itemize}
 }
+\pause
 \textbf{Amazon Identity Management}
 {\small
 \begin{itemize}
@@ -197,6 +245,7 @@ High implies loss-of-life; using the NIST SP800-53 guideline for security contro
 \item Very large instance creation (great for mining bitcoin, for example).
 \end{itemize}
 \end{itemize}}
+\pause
 \textbf{CloudTrail}
 {\small
 \begin{itemize}
